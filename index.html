@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>토리의 역사 타임머신</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: sticky HUD on top, one mission card in the middle, fixed era-progress strip at the bottom. Palette from dancheong (단청) green-blue, vermilion and ochre. */
+:root{
+  --bg:#F6EDE1; --surface:#FFFAF4; --surface2:#FBF2E8; --ink:#4A3426; --muted:#8A7262; --line:#E8D7C4;
+  --accent:#9C6B43; --accent-ink:#FFFAF4; --accent-text:#8A5A33; --soft:#F8DDE1; --red:#C45F5A; --gold:#D49A45; --good:#6A9450; --bad:#C45F5A; --onpastel:#4A3426;
+  --stone:#B8B2A4; --stone2:#968F80; --cel:#8EC1A9; --inlay:#F7F4EA; --metal:#7B8C92; --wood:#956339; --roof:#2C5C58; --flagblue:#2B52A3; --flagred:#CD2E3A; --white:#FFFFFF; --flagline:#1A1A1A;
+  --display:"Do Hyeon","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#2A1F19; --surface:#352821; --surface2:#3D2F27; --ink:#F5E9DC; --muted:#C3AE9C; --line:#4E3D32;
+  --accent:#D9A77A; --accent-ink:#2A1F19; --accent-text:#E8BE95; --soft:#4A3034; --red:#F2A3A3; --gold:#E8C07A; --good:#A8CF8E; --bad:#F2A3A3;
+  --stone:#9C978B; --stone2:#7C776C; --cel:#7FB39B; --inlay:#EDE9DC; --metal:#8C9DA3; --wood:#A8744A; --roof:#4B8C86; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#2A1F19; --surface:#352821; --surface2:#3D2F27; --ink:#F5E9DC; --muted:#C3AE9C; --line:#4E3D32;
+  --accent:#D9A77A; --accent-ink:#2A1F19; --accent-text:#E8BE95; --soft:#4A3034; --red:#F2A3A3; --gold:#E8C07A; --good:#A8CF8E; --bad:#F2A3A3;
+  --stone:#9C978B; --stone2:#7C776C; --cel:#7FB39B; --inlay:#EDE9DC; --metal:#8C9DA3; --wood:#A8744A; --roof:#4B8C86; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;line-height:1.25;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* HUD */
+#hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+#hud .wrap{display:flex;gap:8px 18px;align-items:center;flex-wrap:wrap;padding-block:8px}
+.hud-name{font-family:var(--display);font-size:20px;color:var(--accent-text);margin-right:auto;display:flex;gap:8px;align-items:center}
+.hud-name button{border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:2px 10px;font-family:var(--body);font-size:14px}
+.stat{display:flex;flex-direction:column;align-items:flex-start;min-width:64px}
+.stat b{font-family:var(--display);font-weight:400;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.03em}
+
+/* Bottom era progress */
+#prog{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+#prog .wrap{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;padding-block:8px}
+.pb{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pb small{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb .bar{display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
+.pb .bar i{height:8px;border-radius:2px;background:var(--line)}
+.pb .bar i.ok{background:var(--accent)}
+.pb .bar i.miss{background:var(--stone2)}
+main{padding-block:20px 110px}
+
+/* Generic */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.btn{border:0;border-radius:12px;padding:12px 22px;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:20px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.warn{background:var(--red);color:var(--white)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+
+/* Start */
+.start{display:grid;gap:22px;justify-items:center;text-align:center;padding-top:20px}
+.start h1{font-size:clamp(34px,7vw,56px);color:var(--accent-text)}
+.start h1 em{font-style:normal;color:var(--red)}
+.start .lead{max-width:34em;margin:0}
+.namebox{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.namebox input{font:inherit;font-size:20px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);width:min(260px,100%)}
+.saved{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.saved button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:15px}
+.tori{width:150px;height:auto}
+.err{color:var(--bad);min-height:1.6em;margin:0}
+
+/* Story */
+.story{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}
+.bubble{background:var(--surface);border:1.5px solid var(--accent);border-radius:18px;padding:20px 22px;font-size:20px;position:relative;min-width:0}
+.dots{display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+
+/* Hub */
+.hubhead{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:center;margin-bottom:18px}
+.hubhead .tori{width:72px}
+.dial{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.era{display:grid;gap:6px;text-align:left;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);padding:14px 16px;position:relative}
+.era:hover{border-color:var(--accent)}
+.era .no{font-family:var(--display);font-size:14px;color:var(--muted)}
+.era h3{font-size:22px}
+.era .per{font-size:13px;color:var(--muted)}
+.era .meta{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-variant-numeric:tabular-nums}
+.era .swatch{position:absolute;right:14px;top:14px;width:14px;height:14px;border-radius:50%}
+.era.done{background:var(--soft)}
+.medal{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-family:var(--display);font-size:13px;color:var(--onpastel)}
+.hubfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+
+/* Mission */
+.mhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:12px}
+.mhead h2{font-size:24px}
+.mtype{display:inline-block;font-size:13px;letter-spacing:.04em;padding:2px 10px;border-radius:999px;background:var(--soft);color:var(--accent-text);font-weight:700}
+.steps{display:flex;gap:5px}
+.steps i{width:24px;height:6px;border-radius:3px;background:var(--line)}
+.steps i.ok{background:var(--accent)} .steps i.miss{background:var(--stone2)} .steps i.cur{background:var(--gold)}
+.speaker{display:grid;grid-template-columns:58px 1fr;gap:14px;align-items:start;margin-bottom:16px}
+.avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:26px;color:var(--onpastel)}
+.speaker .who{font-family:var(--display);font-size:18px}
+.speaker .who small{font-family:var(--body);font-size:13px;color:var(--muted);margin-left:6px}
+.speaker p{margin:2px 0 0}
+.q{font-size:20px;font-weight:700;margin:0 0 14px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{border:1.5px solid var(--line);background:var(--surface2);border-radius:12px;padding:14px;text-align:left;font-size:18px;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.no{opacity:.4;text-decoration:line-through}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--surface))}
+.opt.wrong{border-color:var(--bad)}
+.ox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ox .opt{text-align:center;font-family:var(--display);font-size:52px;line-height:1;padding:18px}
+.ox .o{color:var(--flagblue)} .ox .x{color:var(--red)}
+.statement{background:var(--surface2);border-left:5px solid var(--gold);border-radius:8px;padding:14px 16px;font-size:19px;margin:0 0 14px}
+.pics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pic{border:1.5px solid var(--line);background:var(--surface2);border-radius:12px;padding:8px 8px 10px;display:grid;gap:4px;justify-items:center;min-width:0}
+.pic svg{width:100%;height:auto;max-width:150px}
+.pic span{font-size:15px}
+.pic:hover:not(:disabled){border-color:var(--accent)}
+.pic.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--surface))}
+.pic.no{opacity:.35}
+.order{display:grid;gap:8px}
+.ev{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center;border:1.5px solid var(--line);background:var(--surface2);border-radius:12px;padding:10px 12px;text-align:left;font-size:17px}
+.ev .n{width:34px;height:34px;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;font-family:var(--display);font-size:18px}
+.ev.on{border-color:var(--accent)}
+.ev.on .n{border:0;background:var(--accent);color:var(--accent-ink)}
+.ev .yr{display:block;font-size:13px;color:var(--muted)}
+.tools{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.hintbox{margin-top:14px;padding:12px 14px;border-radius:10px;background:color-mix(in srgb,var(--gold) 16%,var(--surface));border:1px dashed var(--gold)}
+.fb{margin-top:16px;border-radius:12px;padding:16px 18px;border:1.5px solid var(--line);background:var(--surface2)}
+.fb h3{font-size:22px;margin-bottom:4px}
+.fb.good h3{color:var(--good)} .fb.bad h3{color:var(--bad)} .fb.retry h3{color:var(--gold)}
+.fb p{margin:6px 0 0}
+.fb .exp{border-top:1px solid var(--line);padding-top:8px;margin-top:10px}
+.fb .exp b{color:var(--accent-text)}
+
+/* Era complete & results */
+.award{display:grid;gap:16px;justify-items:center;text-align:center}
+.bigmedal{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:18px;line-height:1.15;font-family:var(--display);font-size:20px;color:var(--onpastel);box-shadow:inset 0 0 0 6px rgba(255,255,255,.35)}
+.minis{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.mini{display:grid;justify-items:center;gap:2px;font-size:12px;width:76px}
+.mini i{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:15px;background:var(--line);color:var(--muted)}
+.mini.ok i{background:var(--accent);color:var(--accent-ink)}
+.grade{font-family:var(--display);font-size:clamp(34px,6vw,48px);color:var(--red)}
+.chart{display:grid;gap:8px}
+.crow{display:grid;grid-template-columns:120px 1fr 74px;gap:10px;align-items:center;font-size:15px}
+.ctrack{height:18px;background:var(--surface2);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.cfill{height:100%;border-radius:4px 0 0 4px}
+.crow .v{text-align:right;font-variant-numeric:tabular-nums}
+.tl{position:relative;display:grid;gap:18px;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:4px;bottom:4px;width:3px;background:var(--line);border-radius:2px}
+.tle{position:relative}
+.tle .dot{position:absolute;left:-26px;top:3px;width:19px;height:19px;border-radius:50%;border:3px solid var(--surface)}
+.tle h3{font-size:20px}
+.tle ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:2px}
+.tle li{display:grid;grid-template-columns:118px 1fr;gap:8px;font-size:15px}
+.tle li b{font-variant-numeric:tabular-nums;color:var(--accent-text);font-weight:700}
+.tle.locked{opacity:.45}
+.section{margin-top:22px}
+.section h2{font-size:24px;margin-bottom:10px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kv div{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kv b{display:block;font-family:var(--display);font-weight:400;font-size:28px;font-variant-numeric:tabular-nums}
+.kv span{font-size:13px;color:var(--muted)}
+
+@media (max-width:620px){
+  body{font-size:16px}
+  .opts{grid-template-columns:1fr}
+  .pics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .story{grid-template-columns:72px 1fr}
+  .bubble{font-size:18px}
+  .hud-name{width:100%;font-size:18px}
+  #hud .wrap{gap:4px 10px}
+  .stat{min-width:0;flex:1} .stat b{font-size:18px} .stat span{font-size:11px}
+  .crow{grid-template-columns:84px 1fr 64px;font-size:13px}
+  .tle li{grid-template-columns:96px 1fr}
+  #prog .wrap{gap:3px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .pop{animation:pop .35s ease-out}
+  @keyframes pop{from{transform:scale(.92)}to{transform:scale(1)}}
+}
+/* SVG art */
+.a-g{fill:var(--line)} .a-st{fill:var(--stone)} .a-st2{fill:var(--stone2)} .a-ln{stroke:var(--stone2);stroke-width:1.5;fill:none}
+.a-dk{fill:var(--ink);opacity:.75} .a-cel{fill:var(--cel)} .a-in{fill:var(--inlay)} .a-inl{stroke:var(--inlay);stroke-width:1.6;fill:none}
+.a-me{fill:var(--metal)} .a-band{stroke:var(--ink);stroke-width:1.5;opacity:.5;fill:none} .a-wd{fill:var(--wood)} .a-rf{fill:var(--roof)}
+.a-red{fill:var(--flagred)} .a-blue{fill:var(--flagblue)} .a-wh{fill:var(--white);stroke:var(--line);stroke-width:1} .a-bk{fill:var(--flagline)}
+.a-wave{stroke:var(--flagblue);stroke-width:2;fill:none;opacity:.6} .a-oar{stroke:var(--wood);stroke-width:2}
+.t-cap{fill:#8A5A2B} .t-capl{stroke:#6B4420;stroke-width:1.5;fill:none} .t-body{fill:#E3B97A} .t-eye{fill:#1A2B29} .t-gl{fill:#BFE3EC;stroke:#1A2B29;stroke-width:2.5} .t-cheek{fill:#E98A6E;opacity:.6} .t-st{stroke:#1A2B29;stroke-width:2.5;fill:none;stroke-linecap:round} .t-ant{stroke:#6B4420;stroke-width:3} .t-star{fill:#F0B94B}
+</style>
+</head>
+<body>
+
+<header id="hud" hidden></header>
+<main id="main" class="wrap"></main>
+<footer id="prog" hidden></footer>
+
+<script>
+/* ---------- 그림 (직접 그린 문화유산 일러스트) ---------- */
+const ART = {
+  dolmen:{name:'고인돌', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="4" y="82" width="112" height="6" rx="3"/><rect class="a-st" x="30" y="50" width="15" height="34" rx="3"/><rect class="a-st" x="75" y="50" width="15" height="34" rx="3"/><path class="a-st2" d="M12 50 Q18 30 60 28 Q104 30 109 47 Q101 57 60 57 Q20 57 12 50Z"/></svg>`},
+  cheom:{name:'첨성대', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="4" y="88" width="112" height="5" rx="2"/><rect class="a-st2" x="32" y="80" width="56" height="9"/><path class="a-st" d="M40 80 Q35 52 47 28 L73 28 Q85 52 80 80Z"/><path class="a-ln" d="M40 72H80M39 64H81M40 56H80M42 48H78M44 40H76M46 34H74"/><rect class="a-dk" x="54" y="46" width="12" height="11"/><rect class="a-st2" x="43" y="18" width="34" height="5"/><rect class="a-st2" x="43" y="23" width="34" height="5"/><rect class="a-st2" x="43" y="18" width="5" height="10"/><rect class="a-st2" x="72" y="18" width="5" height="10"/></svg>`},
+  dabo:{name:'다보탑', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="4" y="90" width="112" height="5" rx="2"/><rect class="a-st2" x="26" y="80" width="68" height="10"/><rect class="a-st" x="52" y="84" width="16" height="6"/><rect class="a-st" x="34" y="62" width="7" height="18"/><rect class="a-st" x="56" y="62" width="8" height="18"/><rect class="a-st" x="79" y="62" width="7" height="18"/><rect class="a-st2" x="24" y="56" width="72" height="6"/><rect class="a-st" x="38" y="44" width="44" height="12"/><path class="a-ln" d="M44 44V56M52 44V56M60 44V56M68 44V56M76 44V56"/><rect class="a-st2" x="34" y="39" width="52" height="5"/><path class="a-st" d="M44 39 Q60 26 76 39Z"/><rect class="a-st2" x="44" y="26" width="32" height="4"/><path class="a-st" d="M50 26 Q60 18 70 26Z"/><rect class="a-dk" x="59" y="6" width="2" height="16"/><circle class="a-st2" cx="60" cy="12" r="3"/><circle class="a-st2" cx="60" cy="7" r="2.2"/></svg>`},
+  celadon:{name:'고려청자', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="20" y="92" width="80" height="4" rx="2"/><path class="a-cel" d="M53 6 H67 V12 Q90 18 91 40 Q92 62 76 84 L72 92 H48 L44 84 Q28 62 29 40 Q30 18 53 12Z"/><path class="a-inl" d="M38 30 q8-6 14 0 M66 28 q8-6 14 0 M42 66 q7-5 12 0 M66 66 q7-5 12 0"/><circle class="a-in" cx="46" cy="44" r="3"/><circle class="a-in" cx="74" cy="44" r="3"/><circle class="a-in" cx="60" cy="56" r="3"/><path class="a-inl" d="M58 30 l4 6 l6 -2 M50 50 l-6 4 M70 50 l6 4"/></svg>`},
+  rain:{name:'측우기', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="4" y="90" width="112" height="5" rx="2"/><rect class="a-st" x="28" y="66" width="64" height="24" rx="2"/><rect class="a-st2" x="24" y="61" width="72" height="7" rx="2"/><path class="a-ln" d="M36 74H84M36 82H84"/><rect class="a-me" x="46" y="14" width="28" height="47" rx="2"/><ellipse class="a-dk" cx="60" cy="14" rx="14" ry="3"/><path class="a-band" d="M46 29H74M46 45H74"/></svg>`},
+  turtle:{name:'거북선', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><path class="a-wave" d="M4 88 q8-5 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/><path class="a-oar" d="M28 74 L22 86 M42 77 L37 89 M56 78 L52 90 M70 78 L67 90 M84 76 L82 88 M98 72 L97 84"/><path class="a-wd" d="M14 62 Q60 80 110 60 L104 72 Q60 88 20 74Z"/><path class="a-rf" d="M22 63 Q58 30 104 61 Q60 74 22 63Z"/><path class="a-ln" style="stroke:var(--inlay)" d="M40 54 l6 -4 l6 4 l-6 4z M58 48 l6 -4 l6 4 l-6 4z M76 52 l6 -4 l6 4 l-6 4z M50 60 l6 -4 l6 4 M68 60 l6 -4 l6 4"/><path class="a-dk" d="M44 44 l2 -5 l2 5z M58 39 l2 -5 l2 5z M72 40 l2 -5 l2 5z M86 47 l2 -5 l2 5z"/><path class="a-red" d="M16 62 L6 50 L10 44 L18 48 L24 58Z"/><circle class="a-bk" cx="11" cy="49" r="1.6"/></svg>`},
+  dongnip:{name:'독립문', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-g" x="4" y="88" width="112" height="5" rx="2"/><rect class="a-st" x="26" y="32" width="68" height="56"/><path class="a-ln" d="M26 44H94M26 56H94M26 68H94M26 80H94"/><path class="a-dk" d="M48 88V62 A12 12 0 0 1 72 62 V88Z"/><rect class="a-st2" x="22" y="24" width="76" height="9"/><rect class="a-st2" x="30" y="18" width="60" height="7"/><rect class="a-wh" x="44" y="35" width="32" height="10" rx="1"/><text x="60" y="43.5" text-anchor="middle" font-size="8" font-family="Gowun Dodum, sans-serif" style="fill:var(--flagline)">독립문</text></svg>`},
+  flag:{name:'태극기', svg:`<svg viewBox="0 0 120 100" aria-hidden="true"><rect class="a-wh" x="6" y="12" width="108" height="72" rx="1"/><path class="a-red" d="M44 48 A16 16 0 0 1 76 48 A8 8 0 0 1 60 48 A8 8 0 0 0 44 48Z"/><path class="a-blue" d="M44 48 A8 8 0 0 0 60 48 A8 8 0 0 1 76 48 A16 16 0 0 1 44 48Z"/>
+  <g transform="translate(26 28) rotate(-56)"><rect class="a-bk" x="-8" y="-6" width="16" height="2.6"/><rect class="a-bk" x="-8" y="-1.3" width="16" height="2.6"/><rect class="a-bk" x="-8" y="3.4" width="16" height="2.6"/></g>
+  <g transform="translate(94 68) rotate(-56)"><rect class="a-bk" x="-8" y="-6" width="7" height="2.6"/><rect class="a-bk" x="1" y="-6" width="7" height="2.6"/><rect class="a-bk" x="-8" y="-1.3" width="7" height="2.6"/><rect class="a-bk" x="1" y="-1.3" width="7" height="2.6"/><rect class="a-bk" x="-8" y="3.4" width="7" height="2.6"/><rect class="a-bk" x="1" y="3.4" width="7" height="2.6"/></g>
+  <g transform="translate(94 28) rotate(56)"><rect class="a-bk" x="-8" y="-6" width="7" height="2.6"/><rect class="a-bk" x="1" y="-6" width="7" height="2.6"/><rect class="a-bk" x="-8" y="-1.3" width="16" height="2.6"/><rect class="a-bk" x="-8" y="3.4" width="7" height="2.6"/><rect class="a-bk" x="1" y="3.4" width="7" height="2.6"/></g>
+  <g transform="translate(26 68) rotate(56)"><rect class="a-bk" x="-8" y="-6" width="16" height="2.6"/><rect class="a-bk" x="-8" y="-1.3" width="7" height="2.6"/><rect class="a-bk" x="1" y="-1.3" width="7" height="2.6"/><rect class="a-bk" x="-8" y="3.4" width="16" height="2.6"/></g></svg>`},
+};
+const TORI = `<svg class="tori" viewBox="0 0 100 116" role="img" aria-label="시간 여행 안내자 토리"><line class="t-ant" x1="50" y1="14" x2="50" y2="4"/><circle class="t-star" cx="50" cy="5" r="5"/><path class="t-body" d="M18 44 Q16 92 50 110 Q84 92 82 44Z"/><path class="t-cap" d="M10 46 Q12 14 50 12 Q88 14 90 46 Q50 54 10 46Z"/><path class="t-capl" d="M22 22 L40 44 M38 15 L58 44 M58 14 L74 40 M78 20 L86 34 M20 38 L34 24 M34 46 L56 18 M54 47 L76 20"/><circle class="t-gl" cx="37" cy="66" r="10"/><circle class="t-gl" cx="63" cy="66" r="10"/><line class="t-st" x1="47" y1="66" x2="53" y2="66"/><circle class="t-eye" cx="38" cy="67" r="3.6"/><circle class="t-eye" cx="62" cy="67" r="3.6"/><circle class="t-cheek" cx="29" cy="83" r="5"/><circle class="t-cheek" cx="71" cy="83" r="5"/><path class="t-st" d="M42 85 Q50 92 58 85"/></svg>`;
+
+/* ---------- 시대와 미션 ---------- */
+const ERAS = [
+{ id:'gojoseon', name:'고조선', short:'고조선', per:'기원전 2333년(『삼국유사』 기록) ~ 기원전 108년', color:'#E6C9A4',
+  arrive:'우리 역사 최초의 나라, 고조선에 도착했어! 큰 돌무덤과 청동 칼이 보이지?',
+  missions:[
+  { t:'talk', who:'단군왕검', role:'고조선을 세운 임금', line:'어서 오너라, 먼 미래에서 온 탐험가여. 나는 고조선을 세운 단군왕검이다.',
+    q:'고조선을 세운 뜻인 "널리 인간을 이롭게 하라"를 무엇이라 할까?', opts:['홍익인간','8조법','세속오계','훈민정음'],
+    hint:'"널리 홍(弘), 더할 익(益), 사람 인(人), 사이 간(間)"을 합친 말이에요.',
+    exp:'<b>홍익인간</b>은 단군 이야기에 나오는 고조선의 건국 이념이에요. 널리 사람들을 이롭게 한다는 뜻으로, 오늘날 우리나라 교육의 기본 이념이기도 해요.' },
+  { t:'ox', who:'단군왕검', role:'고조선을 세운 임금', line:'내가 태어난 이야기를 들어 보았느냐? 맞는 말인지 판단해 보거라.',
+    q:'단군 이야기에서 곰은 동굴 속에서 쑥과 마늘을 먹으며 견뎌 여자(웅녀)가 되었다.', a:true,
+    hint:'호랑이와 곰 중에 끝까지 참아 낸 동물을 떠올려 보세요.',
+    exp:'<b>맞아요.</b> 곰은 쑥과 마늘을 먹으며 견뎌 웅녀가 되었고, 환웅과 혼인해 단군왕검을 낳았어요. 호랑이는 참지 못하고 뛰쳐나갔지요.',
+    retry:{ q:'단군 이야기에서 호랑이는 끝까지 참아 사람이 되었다.', a:false, exp:'<b>틀린 말이에요.</b> 호랑이는 참지 못해 사람이 되지 못했어요. 끝까지 견딘 것은 곰이에요.' } },
+  { t:'ox', who:'고조선 마을 촌장', role:'마을의 어른', line:'우리 마을에도 지켜야 할 약속이 있다네.',
+    q:'고조선에는 법이 없어서 사람들이 마음대로 행동했다.', a:false,
+    hint:'고조선에는 숫자 "8"이 들어가는 법이 있었어요.',
+    exp:'<b>틀린 말이에요.</b> 고조선에는 <b>8조법</b>이 있었어요. 지금은 세 가지만 전해져요. 사람을 죽인 사람은 사형, 남을 다치게 한 사람은 곡식으로 갚고, 도둑질한 사람은 노비가 되었어요. 생명과 재산을 소중히 여겼다는 것을 알 수 있어요.',
+    retry:{ q:'8조법에 따르면 남을 다치게 한 사람은 곡식으로 갚아야 했다.', a:true, exp:'<b>맞아요.</b> 8조법에는 "남에게 상처를 입힌 사람은 곡식으로 갚는다"는 조항이 있어요. 농사를 짓고 곡식을 중요하게 여긴 사회였다는 뜻이에요.' } },
+  { t:'heritage', who:'고조선 마을 촌장', role:'마을의 어른', line:'우리 지배자가 돌아가시면 아주 큰 돌로 무덤을 만든다네.',
+    q:'고조선 시대 지배자의 무덤으로, 받침돌 위에 큰 덮개돌을 얹어 만든 것은?', opts:['dolmen','cheom','dabo','rain'],
+    hint:'"돌을 괴어 놓았다"는 뜻의 이름이에요.',
+    exp:'<b>고인돌</b>은 청동기 시대 지배자의 무덤이에요. 큰 돌을 옮기려면 많은 사람이 필요했으니, 지배자의 힘이 강했다는 것을 알 수 있어요. 고창·화순·강화의 고인돌 유적은 유네스코 세계 유산이에요.' },
+  { t:'talk', who:'청동기 장인', role:'청동 도구를 만드는 사람', line:'이 칼 좀 보게나. 고조선을 대표하는 청동 칼이지.',
+    q:'옛 악기 비파처럼 생겨서 이름 붙은 이 청동 칼은?', opts:['비파형 동검','세형 동검','철제 칼','돌도끼'],
+    hint:'칼의 이름에 악기 이름이 그대로 들어가요.',
+    exp:'<b>비파형 동검</b>은 비파라는 악기를 닮은 청동 칼이에요. 탁자식 고인돌, 미송리식 토기와 함께 발견되는 곳을 보면 고조선의 문화 범위를 짐작할 수 있어요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'고조선 연표 조각을 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'환웅이 하늘에서 무리를 이끌고 내려옴', year:'단군 이야기'},
+      {text:'곰이 웅녀가 됨', year:'단군 이야기'},
+      {text:'단군왕검이 고조선을 세움', year:'기원전 2333년(『삼국유사』)'},
+      {text:'한나라의 공격으로 고조선이 멸망함', year:'기원전 108년'}],
+    exp:'단군 이야기는 하늘을 섬기는 환웅 부족과 곰을 섬기는 부족이 힘을 합쳐 고조선을 세웠다는 것을 보여 줘요. 고조선은 오랫동안 이어지다 <b>기원전 108년</b> 한나라의 공격으로 무너졌어요.' }
+  ]},
+{ id:'samguk', name:'삼국 시대', short:'삼국', per:'기원전 1세기 ~ 7세기', color:'#F2B8AE',
+  arrive:'고구려, 백제, 신라가 서로 겨루던 삼국 시대야! 누가 먼저 한강을 차지했을까?',
+  missions:[
+  { t:'talk', who:'광개토대왕', role:'고구려의 왕', line:'나는 고구려의 영토를 크게 넓힌 광개토대왕이다.',
+    q:'내 업적을 기록하려고 아들 장수왕이 세운 커다란 비석은?', opts:['광개토대왕릉비','진흥왕 순수비','척화비','탕평비'],
+    hint:'비석 이름에 내 이름이 그대로 들어간단다.',
+    exp:'<b>광개토대왕릉비</b>는 아들 장수왕이 414년에 세웠어요. 높이가 6m가 넘고, 고구려가 넓힌 땅과 광개토대왕의 업적이 새겨져 있어요.' },
+  { t:'ox', who:'근초고왕', role:'백제의 왕', line:'우리 백제의 배는 바다를 건너 멀리까지 간다오.',
+    q:'백제는 근초고왕 때 전성기를 맞아 중국, 왜(일본)와 활발히 교류했다.', a:true,
+    hint:'근초고왕은 4세기 백제의 가장 힘센 왕이었어요.',
+    exp:'<b>맞아요.</b> 근초고왕(4세기) 때 백제는 영토를 넓히고 바다를 통해 중국, 왜와 활발히 교류했어요. 백제는 왜에 한자와 불교 같은 문화를 전해 주기도 했어요.',
+    retry:{ q:'고구려 장수왕은 도읍을 평양으로 옮기고 남쪽으로 영토를 넓혔다.', a:true, exp:'<b>맞아요.</b> 장수왕은 427년 도읍을 평양으로 옮기고 남쪽으로 내려와 한강 유역을 차지했어요.' } },
+  { t:'ox', who:'진흥왕', role:'신라의 왕', line:'한강을 차지하는 나라가 가장 강해진다고들 하지.',
+    q:'신라는 삼국 가운데 가장 먼저 한강 유역을 차지했다.', a:false,
+    hint:'한강을 차지한 순서는 백제 → 고구려 → 신라예요.',
+    exp:'<b>틀린 말이에요.</b> 한강 유역은 <b>백제(4세기) → 고구려(5세기) → 신라(6세기)</b> 순서로 차지했어요. 신라는 진흥왕 때 가장 늦게 한강을 차지했지만, 이것이 삼국 통일의 바탕이 되었어요.',
+    retry:{ q:'신라 진흥왕은 넓힌 땅을 돌아보고 그곳에 순수비를 세웠다.', a:true, exp:'<b>맞아요.</b> 진흥왕은 새로 넓힌 땅에 순수비를 세웠어요. 북한산 순수비가 대표적이에요.' } },
+  { t:'heritage', who:'선덕 여왕', role:'신라의 여왕', line:'나라의 농사를 위해 하늘을 살피는 일은 아주 중요하답니다.',
+    q:'선덕 여왕 때 세운, 하늘의 움직임을 관찰하던 건축물은?', opts:['cheom','dolmen','dongnip','celadon'],
+    hint:'"별을 우러러보는 곳"이라는 뜻의 이름이에요.',
+    exp:'<b>첨성대</b>는 신라 선덕 여왕 때 경주에 세운 천문 관측대예요. 별과 하늘의 움직임을 살펴 농사짓는 시기를 알아내는 데 도움을 주었어요.' },
+  { t:'talk', who:'김유신', role:'신라의 화랑', line:'나는 신라의 화랑 김유신이오. 화랑은 몸과 마음을 함께 닦는다오.',
+    q:'화랑들이 지킨 다섯 가지 가르침을 무엇이라 하오?', opts:['세속오계','홍익인간','8조법','농사직설'],
+    hint:'"다섯 가지 계율"이라는 뜻의 오(五)계가 들어가요.',
+    exp:'<b>세속오계</b>는 원광 법사가 알려 준 화랑의 다섯 가지 가르침이에요. 임금에게 충성하기, 부모에게 효도하기, 친구를 믿음으로 사귀기, 싸움에서 물러서지 않기, 생명을 함부로 죽이지 않기예요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'삼국의 전성기를 순서대로 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'백제 근초고왕이 전성기를 이룸', year:'4세기'},
+      {text:'고구려 광개토대왕이 영토를 크게 넓힘', year:'4세기 말 ~ 5세기 초'},
+      {text:'고구려 장수왕이 도읍을 평양으로 옮김', year:'427년'},
+      {text:'신라 진흥왕이 한강 유역을 차지함', year:'6세기(553년)'}],
+    exp:'삼국은 차례로 전성기를 맞았어요. <b>백제(4세기) → 고구려(5세기) → 신라(6세기)</b>. 전성기를 맞은 나라는 모두 한강 유역을 차지했다는 공통점이 있어요.' }
+  ]},
+{ id:'unified', name:'통일 신라와 발해', short:'통일신라·발해', per:'7세기 ~ 10세기', color:'#F6CFD6',
+  arrive:'남쪽에는 통일 신라, 북쪽에는 발해! 남북국 시대에 왔어.',
+  missions:[
+  { t:'talk', who:'문무왕', role:'통일 신라의 왕', line:'나는 삼국 통일을 마무리한 신라의 문무왕이다.',
+    q:'신라가 백제와 고구려를 무너뜨릴 때 손잡은 나라는?', opts:['당나라','왜','거란','몽골'],
+    hint:'중국 땅에 있던 나라예요. 나중에는 신라가 이 나라와 싸워 몰아냈어요.',
+    exp:'신라는 <b>당나라</b>와 손잡고 백제(660년)와 고구려(668년)를 무너뜨렸어요. 그런데 당이 한반도 전체를 차지하려 하자, 신라는 당과 싸워 몰아내고 676년 삼국 통일을 이루었어요.' },
+  { t:'talk', who:'대조영', role:'발해를 세운 사람', line:'고구려가 무너진 뒤, 나는 고구려 사람들과 말갈 사람들을 이끌고 새 나라를 세웠소.',
+    q:'698년 내가 세운 나라의 이름은?', opts:['발해','후고구려','고려','가야'],
+    hint:'남북국 시대의 "북국"이에요.',
+    exp:'대조영은 698년 <b>발해</b>를 세웠어요. 발해는 일본에 보낸 문서에서 스스로 고구려를 이었다고 밝혔고, 전성기에는 "바다 동쪽의 번성한 나라"라는 뜻의 해동성국이라고 불렸어요.' },
+  { t:'ox', who:'김대성', role:'불국사를 지은 재상', line:'부처님의 나라를 이 땅에 만들고 싶었다오.',
+    q:'불국사와 석굴암은 통일 신라 때 만들어졌으며, 유네스코 세계 유산이다.', a:true,
+    hint:'두 곳은 모두 경주에 있고, 1995년에 함께 세계 유산이 되었어요.',
+    exp:'<b>맞아요.</b> 불국사와 석굴암은 통일 신라 때 김대성이 짓기 시작했어요. 1995년 함께 유네스코 세계 유산으로 등록되었어요.',
+    retry:{ q:'석굴암은 돌을 다듬어 쌓아서 만든 인공 동굴 안에 부처를 모신 곳이다.', a:true, exp:'<b>맞아요.</b> 석굴암은 자연 동굴이 아니라 화강암을 다듬어 쌓아 만든 인공 석굴이에요. 통일 신라의 뛰어난 건축 기술을 보여 줘요.' } },
+  { t:'ox', who:'문무왕', role:'통일 신라의 왕', line:'통일 신라의 땅이 어디까지였는지 아느냐?',
+    q:'통일 신라는 옛 고구려 땅을 모두 차지하여 만주까지 다스렸다.', a:false,
+    hint:'만주 지역에는 다른 나라가 세워졌어요.',
+    exp:'<b>틀린 말이에요.</b> 통일 신라는 대동강에서 원산만에 이르는 선의 남쪽을 다스렸어요. 옛 고구려 땅의 많은 부분에는 <b>발해</b>가 세워졌어요. 그래서 이 시기를 남북국 시대라고도 해요.',
+    retry:{ q:'발해는 스스로 고구려를 이은 나라라고 밝혔다.', a:true, exp:'<b>맞아요.</b> 발해는 일본에 보낸 문서에 "고려(고구려)의 옛 땅을 되찾았다"고 썼어요. 온돌, 기와 같은 생활 문화에도 고구려의 흔적이 남아 있어요.' } },
+  { t:'heritage', who:'김대성', role:'불국사를 지은 재상', line:'불국사 대웅전 앞마당에는 서로 다른 모양의 탑 두 개가 마주 서 있다오.',
+    q:'불국사에 있는, 화려하고 독특한 모양의 탑은? (10원 동전에도 있어요)', opts:['dabo','cheom','dongnip','dolmen'],
+    hint:'단정한 석가탑의 짝이 되는 탑이에요.',
+    exp:'<b>다보탑</b>은 불국사 대웅전 앞에 석가탑과 나란히 서 있어요. 단순하고 단정한 석가탑과 달리 층마다 모양이 달라 화려해요. 10원 동전 그림으로도 볼 수 있어요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'남북국 시대가 어떻게 열렸는지 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'백제가 멸망함', year:'660년'},
+      {text:'고구려가 멸망함', year:'668년'},
+      {text:'신라가 당을 몰아내고 삼국 통일을 이룸', year:'676년'},
+      {text:'대조영이 발해를 세움', year:'698년'}],
+    exp:'백제와 고구려가 차례로 무너진 뒤 신라가 <b>676년</b> 삼국 통일을 이루었고, <b>698년</b> 대조영이 발해를 세우면서 남쪽의 신라와 북쪽의 발해가 함께 있는 남북국 시대가 되었어요.' }
+  ]},
+{ id:'goryeo', name:'고려', short:'고려', per:'918년 ~ 1392년', color:'#D6B796',
+  arrive:'고려에 왔어! 푸른 청자와 금속 활자가 반짝이는 나라야.',
+  missions:[
+  { t:'talk', who:'왕건', role:'고려를 세운 임금', line:'나는 후삼국을 통일한 고려의 태조 왕건이오.',
+    q:'내가 나라 이름을 "고려"라고 지은 까닭은?', opts:['고구려를 잇는다는 뜻','백제를 잇는다는 뜻','중국 나라 이름을 따라서','바다가 높다는 뜻'],
+    hint:'고려는 북쪽 땅을 되찾으려는 북진 정책을 펼쳤어요.',
+    exp:'왕건은 918년 고려를 세우고 936년 후삼국을 통일했어요. 나라 이름 "고려"는 <b>고구려를 계승한다</b>는 뜻이에요. 그래서 고구려의 옛 땅을 되찾으려고 북쪽으로 영토를 넓히려 했어요.' },
+  { t:'talk', who:'서희', role:'고려의 외교관', line:'거란이 대군을 이끌고 쳐들어왔소(993년). 하지만 나는 칼을 들지 않았지.',
+    q:'나는 무엇으로 거란군을 돌려보내고 강동 6주를 얻었을까?', opts:['외교 담판(대화)','거북선','화약 무기','높은 성벽'],
+    hint:'적장과 마주 앉아 한 일이에요.',
+    exp:'서희는 거란 장수 소손녕과 <b>외교 담판</b>을 벌였어요. "고려는 고구려를 이은 나라"라는 점을 논리적으로 밝혀 거란군을 물러가게 하고, 오히려 강동 6주를 얻었어요.' },
+  { t:'ox', who:'고려의 인쇄 장인', role:'금속 활자를 만드는 사람', line:'쇠로 글자를 하나하나 만들어 책을 찍는다네.',
+    q:'고려의 『직지심체요절』은 현재 남아 있는 세계에서 가장 오래된 금속 활자본이다.', a:true,
+    hint:'1377년 청주 흥덕사에서 찍었어요.',
+    exp:'<b>맞아요.</b> 『직지심체요절』은 1377년 청주 흥덕사에서 금속 활자로 찍은 책으로, 현재 남아 있는 세계에서 가장 오래된 금속 활자본이에요. 유네스코 세계 기록 유산이에요.',
+    retry:{ q:'『직지심체요절』은 지금 우리나라 국립중앙박물관에 보관되어 있다.', a:false, exp:'<b>틀린 말이에요.</b> 『직지심체요절』은 현재 <b>프랑스 국립 도서관</b>에 보관되어 있어요. 우리 문화유산을 되찾으려는 노력이 이어지고 있어요.' } },
+  { t:'ox', who:'고려의 스님', role:'대장경판을 새긴 사람', line:'나무판 한 장 한 장에 글자를 새기며 나라의 평안을 빌었지요.',
+    q:'팔만대장경은 거란의 침입을 막으려는 마음으로 만들었다.', a:false,
+    hint:'팔만대장경을 만든 때는 13세기, 다른 나라가 쳐들어왔을 때예요.',
+    exp:'<b>틀린 말이에요.</b> 팔만대장경은 <b>몽골</b>이 쳐들어왔을 때 부처의 힘으로 나라를 지키려는 마음으로 만들었어요(1236~1251년). 거란이 쳐들어왔을 때 만든 것은 그보다 앞선 초조대장경인데, 몽골 침입 때 불타 버렸어요.',
+    retry:{ q:'팔만대장경판은 지금 합천 해인사에 보관되어 있다.', a:true, exp:'<b>맞아요.</b> 팔만대장경판은 해인사 장경판전에 보관되어 있어요. 장경판전은 바람이 잘 통하고 습도가 조절되도록 지어져 지금까지 경판이 잘 보존되었어요.' } },
+  { t:'heritage', who:'고려의 도공', role:'도자기를 굽는 사람', line:'흙을 파내고 흰 흙, 붉은 흙을 메워 넣으면 학과 구름 무늬가 생긴다오.',
+    q:'고려 사람들이 만든, 맑은 푸른빛의 도자기는?', opts:['celadon','rain','turtle','flag'],
+    hint:'"푸를 청(靑)" 자가 들어가요.',
+    exp:'<b>고려청자</b>는 맑고 은은한 푸른빛으로 유명해요. 특히 무늬를 파낸 자리에 다른 색 흙을 메워 넣는 <b>상감 기법</b>은 고려만의 독창적인 기술이에요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'고려 연표 조각을 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'왕건이 고려를 세움', year:'918년'},
+      {text:'서희가 외교 담판으로 강동 6주를 얻음', year:'993년'},
+      {text:'강감찬이 귀주에서 거란군을 크게 물리침', year:'1019년'},
+      {text:'몽골 침입 속에 팔만대장경을 완성함', year:'1251년'}],
+    exp:'고려는 <b>거란</b>의 침입을 외교(서희)와 전투(강감찬의 귀주 대첩)로 막아 냈고, 뒤이어 <b>몽골</b>의 침입 때는 팔만대장경을 만들며 나라를 지키려 했어요.' }
+  ]},
+{ id:'sejong', name:'조선 건국과 세종', short:'조선 전기', per:'1392년 ~ 15세기', color:'#F3D6A0',
+  arrive:'조선이 세워졌어! 세종 대왕과 과학자들을 만나러 가자.',
+  missions:[
+  { t:'talk', who:'이성계', role:'조선을 세운 임금', line:'나는 조선을 세운 태조 이성계다. 새 나라에는 새 도읍이 필요했지.',
+    q:'내가 도읍으로 정한 한양은 오늘날 어느 도시일까?', opts:['서울','개성','평양','경주'],
+    hint:'경복궁이 있는 곳이에요.',
+    exp:'이성계는 1392년 조선을 세우고, 1394년 도읍을 <b>한양(오늘날 서울)</b>으로 옮겼어요. 개성(개경)은 고려의 도읍이었고, 경주는 신라, 평양은 고구려 후기의 도읍이었어요.' },
+  { t:'talk', who:'세종 대왕', role:'조선의 제4대 임금', line:'백성들이 글을 몰라 억울한 일을 당해도 알리지 못하니 마음이 아프구나.',
+    q:'내가 백성을 위해 만든 글자의 처음 이름은 무엇이냐?', opts:['훈민정음','이두','향찰','한자'],
+    hint:'"백성을 가르치는 바른 소리"라는 뜻이에요.',
+    exp:'세종 대왕은 1443년 <b>훈민정음</b>을 만들고 1446년 반포했어요. "백성을 가르치는 바른 소리"라는 뜻으로, 오늘날의 한글이에요. 『훈민정음』 해례본은 유네스코 세계 기록 유산이에요.' },
+  { t:'talk', who:'장영실', role:'조선의 과학자', line:'저는 노비 출신이었지만 세종 대왕께서 재주를 알아봐 주셨지요.',
+    q:'물의 힘으로 스스로 종과 북을 울려 시각을 알려 주는 시계는?', opts:['자격루','앙부일구','혼천의','측우기'],
+    hint:'"스스로(자) 치는(격) 물시계(루)"라는 뜻이에요.',
+    exp:'<b>자격루</b>는 장영실이 만든 자동 물시계예요. 정해진 시각이 되면 인형이 종, 북, 징을 쳐서 시각을 알려 주었어요. 앙부일구는 해 그림자로 시각을 아는 해시계예요.' },
+  { t:'ox', who:'세종 대왕', role:'조선의 제4대 임금', line:'농사는 나라의 근본이니라.',
+    q:'세종 때 펴낸 『농사직설』은 중국의 농사법을 그대로 옮겨 적은 책이다.', a:false,
+    hint:'세종은 각 지역 농부들에게 직접 물어 보게 했어요.',
+    exp:'<b>틀린 말이에요.</b> 『농사직설』은 우리 땅과 기후에 맞는 농사법을 정리한 책이에요. 세종은 경험 많은 농부들의 방법을 조사해 이 책을 만들게 했어요.',
+    retry:{ q:'세종은 집현전을 두어 학자들이 연구하도록 했다.', a:true, exp:'<b>맞아요.</b> 집현전 학자들은 여러 학문을 연구하고 책을 펴냈으며, 훈민정음을 만드는 일에도 참여했어요.' } },
+  { t:'heritage', who:'장영실', role:'조선의 과학자', line:'비가 얼마나 왔는지 정확히 알아야 농사 계획을 세울 수 있지요.',
+    q:'세종 때 만들어 전국에서 내린 비의 양을 재던 기구는?', opts:['rain','dabo','celadon','dongnip'],
+    hint:'"비(雨)를 잰다(測)"는 뜻이에요.',
+    exp:'<b>측우기</b>는 세종 때 만든 강우량 측정 기구예요. 전국 여러 곳에 설치해 비의 양을 기록하게 하여 농사에 활용했어요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'조선 초기 연표를 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'이성계가 조선을 세움', year:'1392년'},
+      {text:'도읍을 한양으로 옮김', year:'1394년'},
+      {text:'세종 대왕이 훈민정음을 만듦', year:'1443년'},
+      {text:'훈민정음을 백성에게 널리 알림(반포)', year:'1446년'}],
+    exp:'조선은 <b>1392년</b> 세워져 <b>1394년</b> 한양으로 도읍을 옮겼어요. 세종 대왕은 <b>1443년</b> 훈민정음을 만들고, 3년 동안 다듬은 뒤 <b>1446년</b> 반포했어요.' }
+  ]},
+{ id:'late', name:'임진왜란과 조선 후기', short:'조선 후기', per:'1592년 ~ 19세기 초', color:'#E3BDB2',
+  arrive:'바다에서 큰 싸움이 벌어지고 있어! 이순신 장군을 만나러 가자.',
+  missions:[
+  { t:'talk', who:'이순신', role:'조선 수군의 장군', line:'1592년, 일본군이 부산으로 쳐들어왔다.',
+    q:'이 전쟁의 이름은 무엇인가?', opts:['임진왜란','병자호란','귀주 대첩','6·25 전쟁'],
+    hint:'1592년은 "임진년"이었어요.',
+    exp:'<b>임진왜란</b>은 1592년(임진년) 일본(왜)이 조선을 침략한 전쟁이에요. 이순신의 수군, 곳곳에서 일어난 의병, 명나라의 지원으로 7년 만에 일본군을 몰아냈어요.' },
+  { t:'heritage', who:'이순신', role:'조선 수군의 장군', line:'적이 배에 올라타지 못하도록 지붕을 덮고 쇠못을 박았다.',
+    q:'임진왜란 때 이순신의 수군이 앞장세운, 지붕을 덮은 배는?', opts:['turtle','dongnip','rain','cheom'],
+    hint:'뱃머리에 용머리가 달렸고, 생김새가 어떤 동물을 닮았어요.',
+    exp:'<b>거북선</b>은 배 위를 덮개로 덮고 쇠못을 꽂아 적이 올라타지 못하게 했어요. 용머리와 배 옆에서 대포를 쏘며 적진으로 돌격했어요.' },
+  { t:'ox', who:'이순신', role:'조선 수군의 장군', line:'학이 날개를 펼치듯 적을 둘러쌌다.',
+    q:'한산도 대첩은 이순신이 학익진 전법으로 크게 이긴 싸움이다.', a:true,
+    hint:'학익진은 "학의 날개 모양 진"이라는 뜻이에요.',
+    exp:'<b>맞아요.</b> 1592년 한산도 앞바다에서 이순신은 학이 날개를 편 모양으로 배를 펼치는 <b>학익진</b>으로 일본 수군을 크게 물리쳤어요.',
+    retry:{ q:'이순신은 전쟁 중의 일을 『난중일기』라는 일기로 남겼다.', a:true, exp:'<b>맞아요.</b> 『난중일기』는 이순신이 임진왜란 중에 쓴 일기로, 유네스코 세계 기록 유산이에요.' } },
+  { t:'ox', who:'인조', role:'조선의 임금', line:'이번에는 북쪽에서 청나라 군대가 쳐들어왔구나(1636년).',
+    q:'병자호란 때 조선은 청나라를 물리치고 크게 이겼다.', a:false,
+    hint:'인조는 남한산성에서 버티다가 결국 삼전도로 나갔어요.',
+    exp:'<b>틀린 말이에요.</b> 병자호란 때 인조는 남한산성으로 피란해 버텼지만, 추위와 식량 부족으로 결국 <b>삼전도에서 청에 항복</b>했어요. 많은 백성이 청으로 끌려가는 큰 아픔을 겪었어요.',
+    retry:{ q:'병자호란 때 인조는 남한산성으로 피란하여 청군에 맞섰다.', a:true, exp:'<b>맞아요.</b> 인조는 남한산성에서 약 47일 동안 버텼어요. 남한산성은 유네스코 세계 유산이에요.' } },
+  { t:'talk', who:'정약용', role:'조선 후기의 실학자', line:'정조 임금의 명을 받아 수원 화성 쌓는 일을 도왔소.',
+    q:'내가 만든, 무거운 돌을 적은 힘으로 들어 올리는 기계는?', opts:['거중기','측우기','자격루','혼천의'],
+    hint:'"무거운 것(重)을 드는(擧) 기계"라는 뜻이에요.',
+    exp:'정약용은 도르래의 원리를 이용한 <b>거중기</b>를 만들었어요. 덕분에 수원 화성을 계획보다 빨리 쌓을 수 있었어요. 정약용처럼 백성의 생활에 도움이 되는 학문을 연구한 사람들을 실학자라고 해요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'전쟁과 그 뒤 조선의 변화를 순서대로 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'일본이 침략하여 임진왜란이 일어남', year:'1592년'},
+      {text:'청이 침략하여 병자호란이 일어남', year:'1636년'},
+      {text:'영조가 탕평비를 세움', year:'1742년'},
+      {text:'정조 때 수원 화성이 완성됨', year:'1796년'}],
+    exp:'두 번의 큰 전쟁(<b>임진왜란, 병자호란</b>) 뒤 조선은 나라를 다시 일으키려 노력했어요. 영조와 정조는 탕평책으로 신하들의 다툼을 줄이고, 정조는 수원 화성을 쌓아 새로운 정치를 펼치려 했어요.' }
+  ]},
+{ id:'modern', name:'개항기와 일제 강점기', short:'개항·일제', per:'1876년 ~ 1945년', color:'#CFC3A0',
+  arrive:'항구가 열리고 낯선 배들이 들어오고 있어. 그리고 곧 아주 힘든 시절이 와…',
+  missions:[
+  { t:'talk', who:'흥선 대원군', role:'고종의 아버지', line:'서양 세력이 문을 열라고 하지만, 나는 그럴 생각이 없다.',
+    q:'서양과 교류하지 않겠다는 뜻을 담아 전국에 세운 비석은?', opts:['척화비','탕평비','광개토대왕릉비','진흥왕 순수비'],
+    hint:'"화친(사이좋게 지내자는 것)을 물리친다"는 뜻이에요.',
+    exp:'흥선 대원군은 병인양요와 신미양요 뒤 서양과의 교류를 거부한다는 뜻을 담은 <b>척화비</b>를 전국에 세웠어요. 이런 정책을 통상 수교 거부 정책이라고 해요.' },
+  { t:'ox', who:'개항장 상인', role:'부산의 상인', line:'항구가 열리니 일본 상인들이 몰려오는구먼.',
+    q:'1876년 조선은 일본과 강화도 조약을 맺었는데, 이는 조선에 불리한 불평등 조약이었다.', a:true,
+    hint:'일본 사람이 조선에서 죄를 지어도 조선 법으로 벌할 수 없었어요.',
+    exp:'<b>맞아요.</b> 강화도 조약으로 부산 등 항구가 열렸어요(개항). 하지만 일본 사람이 조선에서 죄를 지어도 일본 법으로 재판받는 등 조선에 불리한 <b>불평등 조약</b>이었어요.',
+    retry:{ q:'강화도 조약은 조선이 미국과 맺은 조약이다.', a:false, exp:'<b>틀린 말이에요.</b> 강화도 조약은 조선이 <b>일본</b>과 맺은 조약이에요. 우리나라가 맺은 최초의 근대적 조약이에요.' } },
+  { t:'heritage', who:'독립 협회 회원', role:'서재필과 함께한 사람', line:'자주독립의 뜻을 온 백성이 볼 수 있게 크게 세우려 하오.',
+    q:'독립 협회가 자주독립의 의지를 담아 1897년에 세운 문은?', opts:['dongnip','dabo','dolmen','cheom'],
+    hint:'중국 사신을 맞던 영은문을 헐고, 그 자리 근처에 세웠어요.',
+    exp:'<b>독립문</b>은 독립 협회가 백성들의 성금을 모아 세웠어요. 청나라 사신을 맞던 영은문을 헐고 그 근처에 세워, 다른 나라에 기대지 않는 자주독립의 의지를 보여 주었어요.' },
+  { t:'talk', who:'안중근', role:'독립운동가', line:'1909년, 나는 중국 하얼빈역에서 나라를 빼앗는 데 앞장선 사람을 처단했소.',
+    q:'그 사람은 누구일까?', opts:['이토 히로부미','도요토미 히데요시','고종','흥선 대원군'],
+    hint:'을사늑약을 강요한 일본의 정치가예요.',
+    exp:'안중근은 을사늑약을 강요하고 우리 국권을 빼앗는 데 앞장선 <b>이토 히로부미</b>를 하얼빈역에서 처단했어요. 감옥에서도 동양 평화를 주장하는 글을 썼어요. 도요토미 히데요시는 임진왜란을 일으킨 일본의 지배자예요.' },
+  { t:'ox', who:'유관순', role:'독립운동가', line:'대한 독립 만세! 우리 고향 아우내 장터에서도 만세를 외쳤어요.',
+    q:'3·1 운동은 서울에서만 일어났고 다른 지역으로는 퍼지지 않았다.', a:false,
+    hint:'유관순이 만세를 외친 아우내 장터는 충청남도 천안에 있어요.',
+    exp:'<b>틀린 말이에요.</b> 1919년 3월 1일 서울에서 시작된 만세 운동은 <b>전국과 해외</b>로 퍼져 나갔어요. 학생, 농민, 상인 등 많은 사람이 참여했어요.',
+    retry:{ q:'3·1 운동 뒤, 독립운동을 이끌기 위해 중국 상하이에 대한민국 임시 정부가 세워졌다.', a:true, exp:'<b>맞아요.</b> 1919년 상하이에 대한민국 임시 정부가 세워져 독립운동을 이끌었어요. 오늘날 대한민국은 임시 정부의 정신을 이어받았어요.' } },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'개항부터 3·1 운동까지 순서대로 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'강화도 조약을 맺고 항구를 엶', year:'1876년'},
+      {text:'독립 협회가 독립문을 세움', year:'1897년'},
+      {text:'일제에 나라를 빼앗김(국권 피탈)', year:'1910년'},
+      {text:'전국에서 3·1 운동이 일어남', year:'1919년'}],
+    exp:'<b>1876년</b> 개항 뒤 나라를 지키려는 여러 노력이 있었지만, <b>1910년</b> 일제에 나라를 빼앗겼어요. 그러나 우리 민족은 <b>1919년</b> 3·1 운동처럼 독립을 위한 노력을 멈추지 않았어요.' }
+  ]},
+{ id:'liberation', name:'광복과 6·25 전쟁', short:'광복·6·25', per:'1945년 ~ 1953년', color:'#EBB3C2',
+  arrive:'"대한 독립 만세!" 거리에 사람들이 쏟아져 나왔어. 하지만 기쁨도 잠시…',
+  missions:[
+  { t:'talk', who:'김구', role:'대한민국 임시 정부 주석', line:'오랫동안 꿈꾸던 날이 드디어 왔소.',
+    q:'1945년 8월 15일, 우리 민족이 일제로부터 나라를 되찾은 일을 무엇이라 하오?', opts:['광복','개항','정전','개천'],
+    hint:'"빛(光)을 되찾다(復)"라는 뜻이에요.',
+    exp:'<b>광복</b>은 "빛을 되찾았다"는 뜻으로, 1945년 8월 15일 일제의 지배에서 벗어난 일이에요. 우리 민족이 국내외에서 끊임없이 독립운동을 한 결과이기도 해요. 지금은 이날을 광복절로 기념해요.' },
+  { t:'ox', who:'선거 관리 위원', role:'1948년의 공무원', line:'오늘은 우리 손으로 대표를 뽑는 날입니다!',
+    q:'1948년 5월 10일, 우리나라 최초의 민주 선거인 5·10 총선거가 치러졌다.', a:true,
+    hint:'이 선거로 뽑힌 국회의원들이 헌법을 만들었어요.',
+    exp:'<b>맞아요.</b> 5·10 총선거는 우리나라 최초의 민주 선거예요. 하지만 북한 지역이 참여하지 않아 남한에서만 치러졌어요. 이때 뽑힌 국회의원들이 헌법을 만들었어요.',
+    retry:{ q:'대한민국 정부는 1948년 8월 15일에 수립되었다.', a:true, exp:'<b>맞아요.</b> 제헌 국회가 헌법을 만들고 이승만을 대통령으로 뽑은 뒤, 1948년 8월 15일 대한민국 정부가 세워졌어요.' } },
+  { t:'ox', who:'피란민 소녀', role:'1950년의 아이', line:'일요일 새벽, 갑자기 대포 소리가 들렸어요.',
+    q:'6·25 전쟁은 남한이 먼저 북쪽으로 쳐들어가면서 시작되었다.', a:false,
+    hint:'전쟁 초기에 서울이 3일 만에 점령당했어요.',
+    exp:'<b>틀린 말이에요.</b> 6·25 전쟁은 1950년 6월 25일 새벽 <b>북한군이 기습적으로 남쪽으로 쳐내려오면서(남침)</b> 시작되었어요. 국군은 낙동강까지 밀려났어요.',
+    retry:{ q:'6·25 전쟁은 1953년 정전 협정이 맺어지면서 싸움이 멈추었다.', a:true, exp:'<b>맞아요.</b> 1953년 7월 27일 정전 협정이 맺어져 싸움은 멈추었지만, 전쟁이 완전히 끝난 것은 아니에요. 지금도 남북은 휴전선을 사이에 두고 나뉘어 있어요.' } },
+  { t:'talk', who:'맥아더', role:'유엔군 총사령관', line:'국군과 유엔군이 낙동강까지 밀렸을 때, 나는 바다를 통해 적의 뒤쪽을 노렸소.',
+    q:'1950년 9월, 전쟁의 흐름을 바꾼 이 작전은?', opts:['인천 상륙 작전','흥남 철수 작전','한산도 대첩','귀주 대첩'],
+    hint:'서해의 항구 도시로 몰래 배를 대고 육지에 올랐어요.',
+    exp:'<b>인천 상륙 작전</b>으로 국군과 유엔군은 서울을 되찾고 북쪽으로 올라갔어요. 그러나 중국군이 전쟁에 끼어들면서 다시 밀려났고, 그때 흥남에서 많은 피란민이 배를 타고 남쪽으로 내려왔어요(흥남 철수).' },
+  { t:'heritage', who:'김구', role:'대한민국 임시 정부 주석', line:'광복 소식에 사람들이 손에 무언가를 들고 거리로 뛰어나왔다오.',
+    q:'1945년 광복의 날, 사람들이 기쁨에 차 흔든 깃발은?', opts:['flag','dongnip','turtle','celadon'],
+    hint:'가운데 둥근 무늬가 있고, 네 귀퉁이에 검은 괘가 있어요.',
+    exp:'<b>태극기</b>예요. 일제 강점기에는 태극기를 마음대로 들 수 없었어요. 광복의 날 사람들은 숨겨 두었던 태극기를 꺼내 흔들며 "대한 독립 만세"를 외쳤어요.' },
+  { t:'order', who:'토리', role:'시간 여행 안내자', line:'마지막 연표 조각이야! 순서대로 맞춰 보자!',
+    q:'일어난 순서대로 눌러 보세요.', items:[
+      {text:'일제로부터 광복을 맞음', year:'1945년'},
+      {text:'대한민국 정부가 수립됨', year:'1948년'},
+      {text:'북한의 남침으로 6·25 전쟁이 일어남', year:'1950년'},
+      {text:'정전 협정이 맺어짐', year:'1953년'}],
+    exp:'<b>1945년</b> 광복, <b>1948년</b> 대한민국 정부 수립, <b>1950년</b> 6·25 전쟁, <b>1953년</b> 정전 협정. 전쟁으로 많은 사람이 목숨을 잃고 이산가족이 생겼어요. 평화 통일은 지금도 우리의 과제예요.' }
+  ]}
+];
+const TYPE = { talk:'인물 대화', ox:'O/X 판단', heritage:'문화유산 찾기', order:'연표 순서' };
+const MAX = ERAS.length * 6 * 100;
+
+/* ---------- 저장 ---------- */
+const KEY = 'tori-history-v1';
+let store = {};
+function load(){ try{ store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; }catch(e){ store = {}; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} }
+let P = null;           // 현재 탐험가
+let screen = 'start';
+let M = null;           // 진행 중인 미션 상태
+
+/* ---------- 계산 ---------- */
+function res(eraId){ return P.res[eraId] || (P.res[eraId] = []); }
+function eraDone(e){ return res(e.id).length >= 6; }
+function eraScore(e){ return res(e.id).reduce((s,r)=>s+r.score,0); }
+function stats(){
+  let score=0, badges=0, tried=0, first=0, eras=0;
+  ERAS.forEach(e=>{ const r=res(e.id); r.forEach(x=>{score+=x.score; tried++; if(x.ok)badges++; if(x.first)first++;}); if(r.length>=6) eras++; });
+  return { score, badges, tried, first, eras, acc: tried ? Math.round(first/tried*100) : 0 };
+}
+function scoreFor(attempt, hint){ return attempt===1 ? (hint?60:100) : 50; }
+function fmt(sec){ const m=Math.floor(sec/60), s=sec%60; return `${m}:${String(s).padStart(2,'0')}`; }
+function gradeOf(pct){
+  if(pct>=90) return {name:'역사 박사', note:'모든 시대를 꿰뚫어 본 최고의 시간 여행자!'};
+  if(pct>=75) return {name:'시간 여행 대장', note:'우리 역사의 흐름을 잘 이해하고 있어요.'};
+  if(pct>=55) return {name:'시간 여행 대원', note:'중요한 사건은 잘 알아요. 해설을 다시 읽으면 더 좋아요.'};
+  return {name:'견습 탐험가', note:'연표를 보며 시대 순서를 한 번 더 정리해 봐요.'};
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+const $ = s => document.querySelector(s);
+const main = $('#main');
+
+/* ---------- HUD & 진행 바 ---------- */
+function drawHud(){
+  const show = P && screen!=='start';
+  $('#hud').hidden = !show; $('#prog').hidden = !show;
+  if(!show) return;
+  const s = stats();
+  $('#hud').innerHTML = `<div class="wrap">
+    <div class="hud-name">${esc(P.name)} 탐험가 <button id="toHub" type="button">시대 지도</button></div>
+    <div class="stat"><b>${s.badges}<small style="font-size:14px">/48</small></b><span>미션 배지</span></div>
+    <div class="stat"><b>${s.eras}<small style="font-size:14px">/8</small></b><span>시대 배지</span></div>
+    <div class="stat"><b>${s.score.toLocaleString()}</b><span>점수 / 4,800</span></div>
+    <div class="stat"><b>${s.acc}%</b><span>첫 시도 정답률</span></div>
+    <div class="stat"><b id="clock">${fmt(P.elapsed)}</b><span>경과 시간</span></div></div>`;
+  $('#toHub').onclick = ()=>go('hub');
+  $('#prog').innerHTML = `<div class="wrap">${ERAS.map(e=>{
+    const r=res(e.id);
+    return `<div class="pb" title="${e.name}"><small>${e.short}</small><div class="bar">${[0,1,2,3,4,5].map(i=>`<i class="${r[i]?(r[i].ok?'ok':'miss'):''}"></i>`).join('')}</div></div>`;}).join('')}</div>`;
+}
+setInterval(()=>{
+  if(P && screen!=='start' && screen!=='result' && document.visibilityState==='visible'){
+    P.elapsed++; const c=$('#clock'); if(c) c.textContent=fmt(P.elapsed);
+    if(P.elapsed%5===0) save();
+  }
+},1000);
+
+function go(s, arg){ screen=s; window.scrollTo(0,0);
+  ({start:renderStart, story:renderStory, hub:renderHub, mission:renderMission, eradone:renderEraDone, result:renderResult})[s](arg);
+  drawHud(); }
+
+/* ---------- 시작 ---------- */
+function renderStart(){
+  const names = Object.keys(store);
+  main.innerHTML = `<section class="start">
+    ${TORI}
+    <h1>토리의 역사 <em>타임머신</em></h1>
+    <p class="lead">고조선부터 6·25 전쟁까지, 8개 시대를 여행하며 48개의 미션을 해결하고 고장 난 역사 연표를 고쳐 주세요.</p>
+    <form class="namebox" id="nf">
+      <label for="nm" class="muted" style="width:100%">탐험가 이름</label>
+      <input id="nm" maxlength="12" autocomplete="off" placeholder="예: 5-3 김하늘">
+      <button class="btn" type="submit">출발하기</button>
+    </form>
+    <p class="err" id="er"></p>
+    ${names.length?`<div><p class="muted" style="margin:0 0 6px">이 기기에 저장된 탐험가 (눌러서 이어하기)</p><div class="saved">${names.map(n=>{const p=store[n];const sc=ERAS.reduce((s,e)=>s+(p.res[e.id]||[]).reduce((a,r)=>a+r.score,0),0);return `<button type="button" data-n="${esc(n)}">${esc(n)} · ${sc.toLocaleString()}점</button>`;}).join('')}</div></div>`:''}
+  </section>`;
+  $('#nf').onsubmit = ev=>{ ev.preventDefault(); const n=$('#nm').value.trim();
+    if(!n){ $('#er').textContent='이름을 입력해야 출발할 수 있어요.'; return; }
+    begin(n); };
+  main.querySelectorAll('.saved button').forEach(b=>b.onclick=()=>begin(b.dataset.n));
+}
+function begin(name){
+  if(!store[name]) store[name] = { name, elapsed:0, intro:false, res:{} };
+  P = store[name]; save();
+  go(P.intro ? 'hub' : 'story', 0);
+}
+
+/* ---------- 이야기 ---------- */
+function storyLines(){ return [
+  `안녕, ${esc(P.name)}! 나는 시간 여행 안내자 <b>토리</b>야. 도토리처럼 작지만, 5,000년 우리 역사를 넘나드는 타임머신을 운전하지.`,
+  `그런데 큰일이 났어! 타임머신에 들어 있던 <b>역사 연표</b>가 고장 나서, 기억 조각이 8개 시대로 흩어져 버렸어.`,
+  `시대마다 그때 사람들을 만나 <b>미션 6개</b>를 해결하면 미션 배지를 얻고, 6개를 모두 풀면 <b>시대 배지</b>를 받아. 어느 시대부터 가도 괜찮아.`,
+  `처음에 맞히면 <b>100점</b>, 힌트를 보고 맞히면 <b>60점</b>, 틀려도 한 번 더 도전해서 맞히면 <b>50점</b>이야. 모든 미션에 해설이 있으니 틀려도 배우는 거야!`,
+  `8개 시대를 모두 다녀오면 네가 고친 <b>우리 역사 연표</b>와 성적표를 보여 줄게. 자, 출발해 볼까?`]; }
+function renderStory(step){
+  const L = storyLines(); step = step||0;
+  main.innerHTML = `<section style="display:grid;gap:18px;padding-top:24px">
+    <div class="story">${TORI}<div class="bubble pop">${L[step]}</div></div>
+    <div class="row" style="justify-content:space-between">
+      <div class="dots">${L.map((_,i)=>`<i class="${i===step?'on':''}"></i>`).join('')}</div>
+      <div class="row">${step>0?`<button class="btn ghost" id="pv" type="button">이전</button>`:''}
+      <button class="btn" id="nx" type="button">${step<L.length-1?'다음':'시대 지도 열기'}</button></div>
+    </div></section>`;
+  if(step>0) $('#pv').onclick=()=>renderStory(step-1);
+  $('#nx').onclick=()=>{ if(step<L.length-1) renderStory(step+1); else { P.intro=true; save(); go('hub'); } };
+}
+
+/* ---------- 시대 지도 ---------- */
+function renderHub(){
+  const s = stats();
+  const msg = s.eras===8 ? '연표를 모두 고쳤어! 아래에서 최종 결과를 확인해 봐.' : s.tried===0 ? '가고 싶은 시대를 골라 봐. 어디부터 가도 괜찮아!' : `지금까지 시대 배지 ${s.eras}개! 다음은 어느 시대로 갈까?`;
+  main.innerHTML = `<div class="hubhead">${TORI}<div class="bubble">${msg}</div></div>
+    <h2 style="font-size:26px;margin-bottom:10px">시대 지도</h2>
+    <div class="dial">${ERAS.map((e,i)=>{ const r=res(e.id), d=r.length>=6;
+      return `<button type="button" class="era ${d?'done':''}" data-i="${i}">
+        <span class="swatch" style="background:${e.color}"></span>
+        <span class="no">${i+1}번째 시대</span><h3>${e.name}</h3><span class="per">${e.per}</span>
+        <span class="meta"><span>${d?`<span class="medal" style="background:${e.color}">완료</span>`:`미션 ${r.length}/6`}</span><span>${eraScore(e)}점</span></span></button>`; }).join('')}</div>
+    <div class="hubfoot"><span class="muted">연표 순서대로 가면 흐름을 익히기 좋아요.</span>
+      <button class="btn ${s.eras===8?'':'ghost'}" id="rs" type="button">${s.eras===8?'최종 결과 보기':'중간 탐험 일지 보기'}</button></div>`;
+  main.querySelectorAll('.era').forEach(b=>b.onclick=()=>{ const e=ERAS[+b.dataset.i]; if(eraDone(e)) go('eradone', +b.dataset.i); else startMission(+b.dataset.i); });
+  $('#rs').onclick=()=>go('result');
+}
+
+/* ---------- 미션 ---------- */
+function startMission(ei){
+  const e = ERAS[ei], idx = res(e.id).length;
+  const m = e.missions[idx];
+  M = { ei, idx, attempt:1, hint:false, done:false, picked:[], disabled:[], showHint:false, fb:null };
+  if(m.t==='talk') M.opts = shuffle(m.opts.map((t,i)=>({t, ok:i===0})));
+  if(m.t==='heritage') M.opts = shuffle(m.opts.map((k,i)=>({k, ok:i===0})));
+  if(m.t==='order') M.ord = shuffleOrder(m.items);
+  go('mission');
+}
+function shuffleOrder(items){ let s; do{ s=shuffle(items.map((x,i)=>({...x,i}))); }while(s.every((x,k)=>x.i===k)); return s; }
+
+function renderMission(){
+  const e = ERAS[M.ei], m = e.missions[M.idx], r = res(e.id);
+  const isRetryOX = m.t==='ox' && M.attempt===2;
+  const q = isRetryOX ? m.retry.q : m.q;
+  const first = M.idx===0 && M.attempt===1 && !M.done;
+  let body = '';
+  if(m.t==='talk'){
+    body = `<div class="opts">${M.opts.map((o,i)=>{
+      let c='opt'; if(M.disabled.includes(i)) c+=' no'; if(M.done && o.ok) c+=' right';
+      return `<button type="button" class="${c}" data-i="${i}" ${M.done||M.disabled.includes(i)?'disabled':''}>${esc(o.t)}</button>`;}).join('')}</div>`;
+  } else if(m.t==='ox'){
+    const ans = isRetryOX ? m.retry.a : m.a;
+    body = `<p class="statement">${esc(q)}</p><div class="ox">
+      <button type="button" class="opt o ${M.done&&ans?'right':''}" data-v="1" ${M.done?'disabled':''} aria-label="맞다">O</button>
+      <button type="button" class="opt x ${M.done&&!ans?'right':''}" data-v="0" ${M.done?'disabled':''} aria-label="틀리다">X</button></div>`;
+  } else if(m.t==='heritage'){
+    body = `<div class="pics">${M.opts.map((o,i)=>{
+      let c='pic'; if(M.disabled.includes(i)) c+=' no'; if(M.done && o.ok) c+=' right';
+      return `<button type="button" class="${c}" data-i="${i}" ${M.done||M.disabled.includes(i)?'disabled':''}>${ART[o.k].svg}<span>${ART[o.k].name}</span></button>`;}).join('')}</div>`;
+  } else {
+    body = `<div class="order">${M.ord.map((x,i)=>{ const p=M.picked.indexOf(i);
+      const showYr = M.done;
+      return `<button type="button" class="ev ${p>=0?'on':''}" data-i="${i}" ${M.done?'disabled':''}><span class="n">${p>=0?p+1:''}</span><span>${esc(x.text)}${showYr?`<span class="yr">${esc(x.year)}</span>`:''}</span></button>`;}).join('')}</div>`;
+  }
+  const canHint = !M.done && M.attempt===1 && !M.hint;
+  const hintText = m.t==='order' ? `가장 먼저 일어난 일은 "${m.items[0].text}"이에요.` : m.hint;
+  main.innerHTML = `<section>
+    ${first?`<div class="speaker"><div class="avatar" style="background:var(--accent)">토</div><div><div class="who">토리 <small>${e.name} 도착!</small></div><p>${esc(e.arrive)}</p></div></div>`:''}
+    <div class="card">
+      <div class="mhead"><h2>${e.name} · 미션 ${M.idx+1}</h2><div class="row"><span class="mtype">${TYPE[m.t]}</span>
+        <div class="steps">${[0,1,2,3,4,5].map(i=>`<i class="${r[i]?(r[i].ok?'ok':'miss'):(i===M.idx?'cur':'')}"></i>`).join('')}</div></div></div>
+      <div class="speaker"><div class="avatar" style="background:${m.who==='토리'?'var(--accent)':e.color}">${esc(m.who[0])}</div>
+        <div><div class="who">${esc(m.who)} <small>${esc(m.role)}</small></div><p>${esc(m.line)}</p></div></div>
+      ${m.t==='ox'?`<p class="q">${isRetryOX?'새 문장으로 재도전! 맞으면 O, 틀리면 X를 고르세요.':'이 말이 맞으면 O, 틀리면 X를 고르세요.'}</p>`:`<p class="q">${esc(m.q)}</p>`}
+      ${body}
+      ${M.showHint?`<div class="hintbox"><b>힌트</b> ${esc(hintText)}</div>`:''}
+      ${M.fb||''}
+      <div class="tools">
+        <div class="row">${canHint?`<button type="button" class="btn ghost" id="hb">힌트 보기 (최대 60점)</button>`:''}
+        ${m.t==='order'&&!M.done?`<button type="button" class="btn ghost" id="rb">다시 고르기</button>`:''}</div>
+        <div class="row">${m.t==='order'&&!M.done?`<button type="button" class="btn" id="cb" ${M.picked.length<4?'disabled':''}>순서 확인</button>`:''}
+        ${M.done?`<button type="button" class="btn" id="nb">${M.idx<5?'다음 미션':'시대 배지 받기'}</button>`:''}</div>
+      </div>
+    </div></section>`;
+  // events
+  if(canHint) $('#hb').onclick=()=>{ M.hint=true; M.showHint=true; renderMission(); };
+  if(m.t==='talk'||m.t==='heritage') main.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; judge(M.opts[i].ok, ()=>M.disabled.push(i)); });
+  if(m.t==='ox') main.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{ const v=b.dataset.v==='1'; judge(v===(isRetryOX?m.retry.a:m.a)); });
+  if(m.t==='order' && !M.done){
+    main.querySelectorAll('.ev').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, p=M.picked.indexOf(i);
+      if(p>=0) M.picked = M.picked.slice(0,p); else M.picked.push(i); renderMission(); });
+    $('#rb').onclick=()=>{ M.picked=[]; renderMission(); };
+    $('#cb').onclick=()=>{ const ok = M.picked.every((x,k)=>M.ord[x].i===k);
+      judge(ok, ()=>{ M.picked=[]; M.ord=shuffleOrder(m.items); }); };
+  }
+  if(M.done) $('#nb').onclick=()=>{ if(M.idx<5) startMission(M.ei); else go('eradone', M.ei); };
+}
+
+function judge(ok, onWrongFirst){
+  const e = ERAS[M.ei], m = e.missions[M.idx];
+  if(ok){
+    const sc = scoreFor(M.attempt, M.hint);
+    finish(sc, true, M.attempt===1);
+    const why = M.attempt===1 ? (M.hint?'힌트를 보고 맞혔어요':'한 번에 맞혔어요') : '재도전 성공';
+    M.fb = `<div class="fb good pop"><h3>정답! +${sc}점</h3><p>${why}. 미션 배지를 얻었어요.</p><div class="exp">${expOf(m)}</div></div>`;
+  } else if(M.attempt===1){
+    M.attempt = 2; M.showHint=false;
+    if(onWrongFirst) onWrongFirst();
+    if(m.t==='ox'){
+      M.fb = `<div class="fb retry pop"><h3>아쉬워요! 먼저 해설을 읽어 보세요</h3><div class="exp">${m.exp}</div><p>이제 <b>새로운 문장</b>으로 재도전해요. 맞히면 50점!</p></div>`;
+    } else {
+      M.fb = `<div class="fb retry pop"><h3>아쉬워요! 한 번 더 도전해 보세요</h3><p>${m.t==='order'?'순서가 맞지 않아요. 사건들을 다시 순서대로 눌러 보세요.':'고른 답을 지웠어요. 남은 것 중에서 다시 골라 보세요.'} 맞히면 50점!</p></div>`;
+    }
+  } else {
+    finish(0, false, false);
+    M.fb = `<div class="fb bad pop"><h3>이번에는 틀렸어요 (0점)</h3><p>정답을 표시해 두었어요. 해설을 읽고 기억해 봐요.</p><div class="exp">${expOf(m)}</div></div>`;
+  }
+  renderMission(); drawHud();
+}
+function expOf(m){ return (m.t==='ox' && M.attempt===2) ? m.retry.exp : m.exp; }
+function finish(score, ok, first){
+  M.done = true;
+  if(ERAS[M.ei].missions[M.idx].t==='order'){ M.picked = M.ord.map((x,k)=>k).sort((a,b)=>M.ord[a].i-M.ord[b].i); }
+  res(ERAS[M.ei].id)[M.idx] = { score, ok, first, hint:M.hint };
+  save();
+}
+
+/* ---------- 시대 배지 ---------- */
+function renderEraDone(ei){
+  const e = ERAS[ei], r = res(e.id), sc = eraScore(e), s = stats();
+  const next = ERAS.findIndex(x=>!eraDone(x));
+  main.innerHTML = `<section class="card award pop">
+    <div class="bigmedal" style="background:${e.color}">${e.short}</div>
+    <h2 style="font-size:30px">${e.name} 시대 배지 획득!</h2>
+    <p style="margin:0">이 시대에서 <b>${sc}점</b> / 600점, 미션 배지 <b>${r.filter(x=>x.ok).length}개</b>를 모았어요.</p>
+    <div class="minis">${e.missions.map((m,i)=>`<div class="mini ${r[i]&&r[i].ok?'ok':''}"><i>${r[i]?r[i].score:'-'}</i><span>${TYPE[m.t]}</span></div>`).join('')}</div>
+    <div style="text-align:left;width:100%"><p style="margin:0 0 6px"><b>되찾은 연표 조각</b></p>
+      <ul style="margin:0;padding-left:20px">${e.missions[5].items.map(x=>`<li>${esc(x.year)} · ${esc(x.text)}</li>`).join('')}</ul></div>
+    <div class="row" style="justify-content:center">
+      ${s.eras===8?`<button class="btn" id="fr" type="button">최종 결과 보기</button>`:`<button class="btn" id="hb2" type="button">다른 시대로 이동</button>`}
+    </div></section>`;
+  if(s.eras===8) $('#fr').onclick=()=>go('result'); else $('#hb2').onclick=()=>go('hub');
+}
+
+/* ---------- 결과 ---------- */
+function renderResult(){
+  const s = stats(), pct = Math.round(s.score/MAX*100), g = gradeOf(pct), all = s.eras===8;
+  main.innerHTML = `<section class="card">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div><p class="muted" style="margin:0">${esc(P.name)} 탐험가의 ${all?'최종 결과':'중간 탐험 일지'}</p>
+        <div class="grade">${all?g.name:`시대 배지 ${s.eras}/8`}</div>
+        <p style="margin:0">${all?g.note:'모든 시대를 다녀오면 등급이 정해져요.'}</p></div>
+      <div style="width:90px;flex:none">${TORI.replace('class="tori"','class="tori" style="width:90px"')}</div></div>
+    <div class="kv section">
+      <div><b>${s.score.toLocaleString()}</b><span>점수 / 4,800 (${pct}%)</span></div>
+      <div><b>${s.badges}/48</b><span>미션 배지</span></div>
+      <div><b>${s.acc}%</b><span>첫 시도 정답률 (${s.first}/${s.tried})</span></div>
+      <div><b>${fmt(P.elapsed)}</b><span>탐험 시간</span></div></div>
+    <div class="section"><h2>시대별 성취</h2><div class="chart">
+      ${ERAS.map(e=>{ const v=eraScore(e); return `<div class="crow"><span>${e.short}</span><div class="ctrack"><div class="cfill" style="width:${v/6}%;background:${e.color}"></div></div><span class="v">${v}/600</span></div>`; }).join('')}
+    </div><p class="muted" style="font-size:14px;margin:8px 0 0">등급 기준: 90% 이상 역사 박사 · 75% 이상 시간 여행 대장 · 55% 이상 시간 여행 대원 · 그 아래 견습 탐험가</p></div>
+    <div class="section"><h2>내가 고친 우리 역사 연표</h2><div class="tl">
+      ${ERAS.map(e=>{ const d=eraDone(e); return `<div class="tle ${d?'':'locked'}"><span class="dot" style="background:${e.color}"></span>
+        <h3>${e.name} <small class="muted" style="font-family:var(--body);font-size:14px">${d?'시대 배지 획득':'아직 고치지 못한 조각'}</small></h3>
+        <ul>${e.missions[5].items.map(x=>`<li><b>${esc(x.year)}</b><span>${d?esc(x.text):'? ? ?'}</span></li>`).join('')}</ul></div>`; }).join('')}
+    </div></div>
+    <div class="tools"><div class="row"><button class="btn ghost" id="rst" type="button">처음부터 다시 하기</button><span id="cf"></span></div>
+      <button class="btn" id="bk" type="button">시대 지도로</button></div>
+  </section>`;
+  $('#bk').onclick=()=>go('hub');
+  $('#rst').onclick=()=>{ $('#cf').innerHTML = `<span class="row"><span>${esc(P.name)}의 기록이 모두 지워져요.</span><button class="btn warn" id="yes" type="button">지우고 다시 시작</button></span>`;
+    $('#yes').onclick=()=>{ delete store[P.name]; save(); P=null; go('start'); }; };
+}
+
+load(); go('start');
+</script>
+</body>
+</html>
